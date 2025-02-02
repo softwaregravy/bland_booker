@@ -1,5 +1,6 @@
 module Api
   class BookingsController < ApplicationController
+    include AvailabilityChecker
     skip_before_action :verify_authenticity_token
     def create
       unless params[:date] && params[:start_time] && params[:patient_name]
@@ -28,36 +29,5 @@ module Api
 
     private
 
-    def is_time_available?(date, time)
-
-      # Check if time falls within schedule
-      day_schedule = load_availability_config["schedule"][date.strftime("%A").downcase]
-      return false unless day_schedule
-
-      time_obj = Time.parse(time)
-      window_available = day_schedule.any? do |window|
-        start_time = Time.parse(window["start"])
-        end_time = Time.parse(window["end"])
-        
-        comparison_time = Time.new(date.year, date.month, date.day, 
-                                 time_obj.hour, time_obj.min)
-        
-        comparison_time >= start_time && comparison_time <= (end_time - 59.minutes)
-      end
-
-      return false unless window_available
-
-      # Check if there's no booking
-      bookings = load_bookings["bookings"]
-      !bookings.any? { |booking| booking["date"] == date.to_s && booking["start_time"] == time }
-    end
-
-    def load_availability_config
-      @availability_config ||= JSON.parse(File.read(Rails.root.join('config', 'availability.json')))
-    end
-
-    def load_bookings
-      @bookings ||= JSON.parse(File.read(Rails.root.join('db', 'bookings.json')))
-    end
   end
 end
