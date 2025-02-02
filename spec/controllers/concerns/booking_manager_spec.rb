@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe BookingManager do
+  # Create a test class that includes our module
+  class TestClass
+    include BookingManager
+  end
+
+  subject { TestClass.new }
   let(:monday) { Date.parse("2024-02-05") } # A Monday
   
   before do
