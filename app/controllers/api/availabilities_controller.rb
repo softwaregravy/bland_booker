@@ -56,9 +56,11 @@ module Api
         
         current_slot = Time.new(date.year, date.month, date.day, 
                               start_time.hour, start_time.min)
+        window_end = Time.new(date.year, date.month, date.day,
+                            end_time.hour, end_time.min)
         
-        puts "starting daily inspection with #{current_slot}, is this less than end_time #{end_time}? #{current_slot < end_time - 59.minutes}"
-        while current_slot < end_time - 59.minutes
+        puts "starting daily inspection with #{current_slot}, is this less than end_time #{window_end}? #{current_slot < window_end - 59.minutes}"
+        while current_slot < window_end - 59.minutes
           puts "checking if current_slot is available: #{current_slot} on date #{date.to_s}"
           if is_time_available?(date, current_slot.strftime("%H:%M"))
             datetime_str = "#{date}T#{current_slot.strftime("%H:%M")}"
