@@ -14,9 +14,9 @@ curl http://localhost:3000/api/availabilities
 curl http://localhost:3000/api/availabilities?date=2024-02-05
 ```
 
-### Check Specific Time Slot
+### Check Specific Time Slot Availability
 ```bash
-curl http://localhost:3000/api/availabilities/2024-02-05T09:00
+curl http://localhost:3000/api/availabilities/status/2024-02-05/09:00
 ```
 
 ### Create a Booking
