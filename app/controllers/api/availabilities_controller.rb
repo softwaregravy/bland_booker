@@ -40,21 +40,28 @@ module Api
     def get_availabilities_for_date(date)
       return [] unless business_day?(date)
 
+      puts "!!!"
+      puts "checking availability for date: #{date.strftime("%A").downcase} - #{date.to_s}"
       day_schedule = load_availability_config["schedule"][date.strftime("%A").downcase]
+      puts "found day_schedule: #{day_schedule}"
       return [] unless day_schedule
 
+      puts "preparing available slots"
       available_slots = []
       
       day_schedule.each do |window|
+        puts "processing window: #{window}"
         start_time = Time.parse(window["start"])
         end_time = Time.parse(window["end"])
         
         current_slot = Time.new(date.year, date.month, date.day, 
                               start_time.hour, start_time.min)
         
+        puts "starting daily inspection with #{current_slot}, is this less than end_time #{end_time}? #{current_slot < end_time - 59.minutes}"
         while current_slot < end_time - 59.minutes
-          datetime_str = "#{date}T#{current_slot.strftime("%H:%M")}"
+          puts "checking if current_slot is available: #{current_slot} on date #{date.to_s}"
           if is_time_available?(date, current_slot.strftime("%H:%M"))
+            datetime_str = "#{date}T#{current_slot.strftime("%H:%M")}"
             available_slots << datetime_str
           end
           current_slot += load_availability_config["slot_duration"].minutes
