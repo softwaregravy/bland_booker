@@ -206,3 +206,9 @@ tags
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/ruby,rails,vim,visualstudiocode,git,osx
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
