@@ -1,6 +1,6 @@
 module Api
   class BookingsController < ApplicationController
-    include AvailabilityChecker
+    include BookingManager
     skip_before_action :verify_authenticity_token
     def create
       unless params[:date] && params[:start_time] && params[:patient_name]

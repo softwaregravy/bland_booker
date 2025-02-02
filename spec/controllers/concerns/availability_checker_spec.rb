@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AvailabilityChecker do
+RSpec.describe BookingManager do
   subject { Class.new { include AvailabilityChecker }.new }
   let(:monday) { Date.parse("2024-02-05") } # A Monday
   

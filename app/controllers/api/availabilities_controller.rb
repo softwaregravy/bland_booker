@@ -1,6 +1,6 @@
 module Api
   class AvailabilitiesController < ApplicationController
-    include AvailabilityChecker
+    include BookingManager
     skip_before_action :verify_authenticity_token
     def index
       availabilities = if availability_params[:date]

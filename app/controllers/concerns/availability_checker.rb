@@ -1,4 +1,4 @@
-module AvailabilityChecker
+module BookingManager
   extend ActiveSupport::Concern
 
   private
