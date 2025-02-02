@@ -1,5 +1,6 @@
 module Api
   class BookingsController < ApplicationController
+    skip_before_action :verify_authenticity_token
     def create
       unless params[:date] && params[:start_time] && params[:patient_name]
         return render json: { error: "Missing required parameters" }, status: :unprocessable_entity
