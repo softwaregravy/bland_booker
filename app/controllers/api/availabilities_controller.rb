@@ -12,10 +12,10 @@ module Api
     end
 
     def show
-      date, time = params[:id].split('T')
+      date, start_time = params[:id].split('T')
       date = Date.parse(date)
       
-      if is_time_available?(date, time)
+      if is_time_available?(date, start_time)
         render json: { available: true }
       else
         render json: { available: false }
@@ -72,27 +72,27 @@ module Api
       available_slots
     end
 
-    def is_time_available?(date, time)
+    def is_time_available?(date, start_time)
       # Check if time falls within schedule
       day_schedule = load_availability_config["schedule"][date.strftime("%A").downcase]
       return false unless day_schedule
 
-      time_obj = Time.parse(time)
+      start_time_obj = Time.parse(start_time)
       window_available = day_schedule.any? do |window|
-        start_time = Time.parse(window["start"])
-        end_time = Time.parse(window["end"])
+        window_start = Time.parse(window["start"])
+        window_end = Time.parse(window["end"])
         
         comparison_time = Time.new(date.year, date.month, date.day, 
-                                 time_obj.hour, time_obj.min)
+                                 start_time_obj.hour, start_time_obj.min)
         
-        comparison_time >= start_time && comparison_time <= (end_time - 59.minutes)
+        comparison_time >= window_start && comparison_time <= (window_end - 59.minutes)
       end
 
       return false unless window_available
 
       # Check if there's no booking
       bookings = load_bookings["bookings"]
-      !bookings.any? { |booking| booking["date"] == date.to_s && booking["start_time"] == time }
+      !bookings.any? { |booking| booking["date"] == date.to_s && booking["start_time"] == start_time }
     end
 
     def load_availability_config
