@@ -29,7 +29,6 @@ module Api
     private
 
     def is_time_available?(date, time)
-      return false unless business_day?(date)
 
       # Check if time falls within schedule
       day_schedule = load_availability_config["schedule"][date.strftime("%A").downcase]
@@ -51,10 +50,6 @@ module Api
       # Check if there's no booking
       bookings = load_bookings["bookings"]
       !bookings.any? { |booking| booking["date"] == date.to_s && booking["start_time"] == time }
-    end
-
-    def business_day?(date)
-      !date.saturday? && !date.sunday?
     end
 
     def load_availability_config
