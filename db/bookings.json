@@ -1,3 +1,29 @@
 {
-  "bookings": []
+  "bookings": [
+    {
+      "date": "2025-02-05",
+      "start_time": "09:00",
+      "patient_name": "John Doe"
+    },
+    {
+      "date": "2025-02-05",
+      "start_time": "11:00",
+      "patient_name": "John Doe"
+    },
+    {
+      "date": "2025-02-02",
+      "start_time": "10:00",
+      "patient_name": "John Doe"
+    },
+    {
+      "date": "2025-02-02",
+      "start_time": "10:00",
+      "patient_name": "John Doe"
+    },
+    {
+      "date": "2025-02-02",
+      "start_time": "10:00",
+      "patient_name": "John Doe"
+    }
+  ]
 }
