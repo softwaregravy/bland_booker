@@ -61,4 +61,32 @@ RSpec.describe AvailabilityChecker do
       end
     end
   end
+
+  describe '#book_appointment!' do
+    let(:new_booking) { { "date" => monday.to_s, "start_time" => "09:00", "patient_name" => "Jane Smith" } }
+    
+    before do
+      allow(File).to receive(:write)
+    end
+
+    it 'adds the booking to the bookings data' do
+      expect(subject.send(:book_appointment!, monday, "09:00", "Jane Smith")).to eq(new_booking)
+    end
+
+    it 'writes the updated bookings to the file' do
+      expected_bookings = {
+        "bookings" => [
+          { "date" => monday.to_s, "start_time" => "10:00", "patient_name" => "John Doe" },
+          new_booking
+        ]
+      }
+
+      subject.send(:book_appointment!, monday, "09:00", "Jane Smith")
+      
+      expect(File).to have_received(:write).with(
+        Rails.root.join('db', 'bookings.json'),
+        JSON.pretty_generate(expected_bookings)
+      )
+    end
+  end
 end

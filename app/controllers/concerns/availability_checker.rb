@@ -39,6 +39,20 @@ module AvailabilityChecker
     @availability_config ||= JSON.parse(File.read(Rails.root.join('config', 'availability.json')))
   end
 
+  def book_appointment!(date, start_time, patient_name)
+    booking = {
+      "date" => date.to_s,
+      "start_time" => start_time,
+      "patient_name" => patient_name
+    }
+
+    bookings_data = load_bookings
+    bookings_data["bookings"] << booking
+    
+    File.write(Rails.root.join('db', 'bookings.json'), JSON.pretty_generate(bookings_data))
+    booking
+  end
+
   def load_bookings
     @bookings ||= JSON.parse(File.read(Rails.root.join('db', 'bookings.json')))
   end

@@ -13,17 +13,7 @@ module Api
         return render json: { error: "Time slot is not available" }, status: :unprocessable_entity
       end
 
-      booking = {
-        "date" => date.to_s,
-        "start_time" => params[:start_time],
-        "patient_name" => params[:patient_name]
-      }
-
-      bookings_data = load_bookings
-      bookings_data["bookings"] << booking
-      
-      File.write(Rails.root.join('db', 'bookings.json'), JSON.pretty_generate(bookings_data))
-      
+      booking = book_appointment!(date, params[:start_time], params[:patient_name])
       render json: { booking: booking }, status: :created
     end
 
