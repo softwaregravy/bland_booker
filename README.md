@@ -23,5 +23,5 @@ curl http://localhost:3000/api/availabilities/status/2024-02-05/09:00
 ```bash
 curl -X POST http://localhost:3000/api/bookings \
   -H "Content-Type: application/json" \
-  -d '{"date":"2024-02-05","start_time":"09:00","patient_name":"John Doe"}'
+  -d '{"date":"2025-02-05","start_time":"09:00","patient_name":"John Doe"}'
 ```
