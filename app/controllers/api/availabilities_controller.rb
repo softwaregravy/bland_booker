@@ -38,8 +38,6 @@ module Api
     end
 
     def get_availabilities_for_date(date)
-      return [] unless business_day?(date)
-
       puts "!!!"
       puts "checking availability for date: #{date.strftime("%A").downcase} - #{date.to_s}"
       day_schedule = load_availability_config["schedule"][date.strftime("%A").downcase]
@@ -64,6 +62,7 @@ module Api
           puts "checking if current_slot is available: #{current_slot} on date #{date.to_s}"
           if is_time_available?(date, current_slot.strftime("%H:%M"))
             datetime_str = "#{date}T#{current_slot.strftime("%H:%M")}"
+            puts "Yes it is, add #{datetime_str} to the set"
             available_slots << datetime_str
           end
           current_slot += load_availability_config["slot_duration"].minutes
@@ -74,8 +73,6 @@ module Api
     end
 
     def is_time_available?(date, time)
-      return false unless business_day?(date)
-
       # Check if time falls within schedule
       day_schedule = load_availability_config["schedule"][date.strftime("%A").downcase]
       return false unless day_schedule
@@ -96,10 +93,6 @@ module Api
       # Check if there's no booking
       bookings = load_bookings["bookings"]
       !bookings.any? { |booking| booking["date"] == date.to_s && booking["start_time"] == time }
-    end
-
-    def business_day?(date)
-      !date.saturday? && !date.sunday?
     end
 
     def load_availability_config
