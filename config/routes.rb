@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   namespace :api do
-    resources :availabilities, only: [:index, :show]
+    resources :availabilities, only: [:index] do
+      get 'status/:date/:time', on: :collection, action: :status
+    end
     resources :bookings, only: [:create]
   end
 

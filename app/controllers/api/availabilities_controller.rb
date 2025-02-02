@@ -1,9 +1,8 @@
 module Api
   class AvailabilitiesController < ApplicationController
     def index
-      date = params[:date]
-      availabilities = if date
-        get_availabilities_for_date(Date.parse(date))
+      availabilities = if availability_params[:date]
+        get_availabilities_for_date(Date.parse(availability_params[:date]))
       else
         get_all_availabilities
       end
@@ -11,15 +10,17 @@ module Api
       render json: { availabilities: availabilities }
     end
 
-    def show
-      date, start_time = params[:id].split('T')
-      date = Date.parse(date)
+    def status
+      date = Date.parse(params[:date])
+      time = params[:time]
       
-      if is_time_available?(date, start_time)
-        render json: { available: true }
-      else
-        render json: { available: false }
-      end
+      render json: { available: is_time_available?(date, time) }
+    end
+
+    private
+
+    def availability_params
+      params.permit(:date)
     end
 
     private
